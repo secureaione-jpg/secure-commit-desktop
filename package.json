@@ -3,7 +3,7 @@
   "productName": "Secure Commit",
   "version": "0.1.0",
   "description": "Secure Commit — the desktop app for secureai.one/commit",
-  "author": "Secure AI",
+  "author": { "name": "Secure AI", "email": "secureai.one@gmail.com" },
   "private": true,
   "main": "main.js",
   "scripts": {
