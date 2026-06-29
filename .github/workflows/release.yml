@@ -3,7 +3,11 @@ name: Release
 # Build installers for macOS, Windows, and Linux and publish them to a GitHub
 # Release. electron-builder is the sole publisher (it also writes the
 # latest*.yml manifests that electron-updater reads). Triggers on a version
-# tag (e.g. v0.1.2) or manual dispatch.
+# tag (e.g. v0.1.3) or manual dispatch.
+#
+# Code signing is OPT-IN via repository secrets — see SIGNING.md. With no
+# secrets set the build is unsigned (today's behavior); add the secrets and it
+# signs + notarizes automatically with no workflow change.
 on:
   push:
     tags:
@@ -34,5 +38,16 @@ jobs:
         run: npm run dist -- --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # No code-signing certs configured yet; build unsigned for now.
-          CSC_IDENTITY_AUTO_DISCOVERY: false
+          # macOS signing cert (base64 .p12) + password
+          CSC_LINK: ${{ secrets.MAC_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CSC_KEY_PASSWORD }}
+          # Windows signing cert (base64 .pfx) + password
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          # Apple notarization (read by build/notarize.js)
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # Only enable macOS code-signing discovery when a cert is provided,
+          # otherwise build unsigned (string 'true'/'false').
+          CSC_IDENTITY_AUTO_DISCOVERY: ${{ secrets.MAC_CSC_LINK != '' }}
