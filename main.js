@@ -1,5 +1,6 @@
 const { app, BrowserWindow, shell, Menu, dialog } = require("electron");
 const path = require("path");
+const { autoUpdater } = require("electron-updater");
 
 // The single source of truth: the live Secure Commit page on the website.
 // Change APP_URL only if the route ever moves. Everything users see comes
@@ -106,6 +107,10 @@ function buildMenu() {
 app.whenReady().then(() => {
   buildMenu();
   createWindow();
+
+  // Self-update the shell from GitHub Releases on launch.
+  // No-ops in dev / unpackaged builds; downloads + installs on next quit.
+  autoUpdater.checkForUpdatesAndNotify();
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
