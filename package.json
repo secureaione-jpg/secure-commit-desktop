@@ -1,7 +1,7 @@
 {
   "name": "secure-commit-desktop",
   "productName": "Secure Commit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Secure Commit — the desktop app for secureai.one/commit",
   "author": {
     "name": "Secure AI",
@@ -69,7 +69,8 @@
       {
         "provider": "github",
         "owner": "secureaione-jpg",
-        "repo": "secure-commit-desktop"
+        "repo": "secure-commit-desktop",
+        "releaseType": "release"
       }
     ]
   },
